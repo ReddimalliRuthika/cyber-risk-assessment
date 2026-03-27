@@ -2,196 +2,311 @@
 
 ## 📌 Project Overview
 
-The **Cyber Risk Assessment System** is a Python-based platform designed to automate vulnerability scanning, risk analysis, and threat intelligence integration.
+The **Cyber Risk Assessment System** is a Python-based platform designed to automate vulnerability scanning, analyze risks, and provide actionable threat intelligence.
 
-It helps organizations identify security risks, analyze threats, and generate actionable reports to improve their cybersecurity posture.
-
----
-
-## 🚀 Features
-
-* 🔍 **Port Scanning**
-
-  * Detects open ports and running services using Nmap
-
-* 🌐 **Threat Intelligence Integration**
-
-  * Uses VirusTotal API for real-time threat analysis
-
-* 📊 **Risk Scoring System**
-
-  * Calculates exposure, threat score, and overall risk
-
-* 📈 **Interactive Dashboard**
-
-  * Built with Streamlit for real-time visualization
-
-* 📜 **Scan History**
-
-  * Stores previous scans using SQLite database
-
-* 📄 **Report Generation**
-
-  * Download reports in PDF, CSV, and JSON formats
-
-* 📧 **Email Alerts**
-
-  * Sends alerts for high and critical risks
-
-* 🔗 **REST API**
-
-  * FastAPI-based endpoints for accessing scan data
+It helps organizations detect security weaknesses, evaluate risk levels, and improve their cybersecurity posture. The system integrates tools like **Nmap** for scanning and **VirusTotal API** for threat intelligence, with results visualized through an interactive **Streamlit dashboard**.
 
 ---
 
-## 🏗️ Project Structure
+## 🎯 Objectives
 
-```
-cyber-risk-assessment/
-│
-├── dashboard/
-│   ├── home.py
-│   └── pages/
-│       ├── 1_app.py
-│       ├── 2_analysis.py
-│       ├── 3_scan_data.py
-│       ├── 4_history.py
-│       └── 5_download_report.py
-│
-├── modules/
-│   ├── analyser.py
-│   ├── database.py
-│   ├── emailer.py
-│   ├── report.py
-│   └── scanner.py
-│
-├── api.py
-├── ui.py
-├── requirements.txt
-├── README.md
-├── license.txt
-└── .gitignore
-```
+* Automate vulnerability scanning (ports & services)
+* Integrate threat intelligence (VirusTotal API)
+* Calculate risk scores based on exposure & threats
+* Provide real-time dashboards and analytics
+* Send alerts for high/critical risks
+* Generate downloadable reports (PDF, CSV, JSON)
 
 ---
 
-## ⚙️ Technologies Used
+## 🏗️ System Architecture
 
-* **Frontend:** Streamlit
+### 🔹 Components:
 
-* **Backend:** Python
+1. **Frontend Dashboard**
 
-* **API:** FastAPI
+   * Built using Streamlit
+   * Displays scan results, analytics, and reports
 
-* **Database:** SQLite
+2. **Scanning Engine**
 
-* **Libraries:**
+   * Uses Nmap for port/service detection
 
-  * pandas
-  * plotly
-  * requests
-  * python-dotenv
-  * fpdf
+3. **Threat Intelligence Layer**
 
-* **Tools & APIs:**
+   * Integrates VirusTotal API
 
-  * Nmap (Port Scanning)
-  * VirusTotal API (Threat Intelligence)
+4. **Analytics Engine**
 
----
+   * Computes risk scores and severity levels
 
-## 🛠️ Installation & Setup
+5. **Database Layer**
 
-### 1️⃣ Install Dependencies
+   * Uses SQLite to store scan history
 
-```bash
-pip install -r requirements.txt
-```
+6. **API Layer**
 
-### 2️⃣ Setup Environment Variables
+   * Built with FastAPI
 
-Create a `.env` file in the root directory:
+7. **Notification System**
 
-```
-VT_API_KEY=your_virustotal_api_key
-EMAIL_SENDER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password
-```
+   * Sends email alerts using SMTP
 
 ---
 
-## ▶️ Running the Project
+## ⚙️ Technology Stack
 
-### 🔹 Run Streamlit Dashboard
-
-```bash
-streamlit run dashboard/home.py
-```
-
-### 🔹 Run FastAPI Server
-
-```bash
-uvicorn api:app --reload
-```
-
----
-
-## 📊 API Endpoints
-
-| Endpoint                    | Description          |
-| --------------------------- | -------------------- |
-| `/`                         | Check API status     |
-| `/results`                  | Get all scan results |
-| `/results/severity/{level}` | Filter by severity   |
-| `/results/ip/{ip}`          | Filter by IP         |
+| Technology         | What it Does in This Project                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------- |
+| **Python**         | Main programming language used to build backend logic, integrate modules, and control the entire system |
+| **Streamlit**      | Creates an interactive web dashboard where users input targets and view scan results                    |
+| **Plotly**         | Used for visualizing data through charts like bar graphs, pie charts, heatmaps, and trends              |
+| **Nmap**           | Performs network scanning to detect open ports and running services on target systems                   |
+| **VirusTotal API** | Provides threat intelligence by checking whether an IP address is malicious or suspicious               |
+| **SQLite**         | Stores scan results and history in a lightweight local database                                         |
+| **FastAPI**        | Builds REST APIs to access scan data programmatically                                                   |
+| **FPDF**           | Generates PDF reports containing scan results and risk summaries                                        |
+| **SMTP (Email)**   | Sends alert emails to users when high or critical risks are detected                                    |
+| **python-dotenv**  | Loads sensitive data like API keys and email credentials securely from `.env` file                      |
 
 ---
 
-## 📈 Risk Calculation
+## 🧩 Modules Description
 
-Risk score is calculated using:
+### 🔍 1. Vulnerability Scanning Engine (`scanner.py`)
 
-* Exposure Score (based on service)
-* Threat Score (VirusTotal data)
+* Runs Nmap scans on targets
+* Extracts:
+
+  * IP address
+  * Open ports
+  * Running services
+
+---
+
+### 🌐 2. Threat Intelligence Module
+
+* Uses VirusTotal API
+* Retrieves:
+
+  * Malicious count
+  * Suspicious count
+
+---
+
+### 📊 3. Risk Scoring & Analytics (`analyser.py`)
+
+#### Risk Calculation:
+
+* **Exposure Score:**
+
+  * High-risk (FTP, Telnet, RDP) → 8
+  * Medium (HTTP, SSH) → 5
+  * Low → 2
+
+* **Threat Score:**
+
+```
+Threat Score = (Malicious × 2) + Suspicious
+```
+
+* **Final Risk Score:**
 
 ```
 Risk Score = (Exposure × 0.6) + (Threat × 0.4)
 ```
 
-Severity Levels:
+#### Severity Levels:
 
-* 🔥 Critical
-* ⚠️ High
-* 🟡 Medium
-* 🟢 Low
+| Score | Severity    |
+| ----- | ----------- |
+| ≥ 7   | 🔥 Critical |
+| ≥ 5   | ⚠️ High     |
+| ≥ 3   | 🟡 Medium   |
+| < 3   | 🟢 Low      |
 
 ---
 
-## 📄 Output
+### 📈 4. Dashboard & Visualization
 
-* 📊 Dashboard Visualizations
-* 📜 Scan History
-* 📄 PDF Reports
-* 📧 Email Alerts
+* Service distribution (Bar chart)
+* Severity breakdown (Pie chart)
+* Risk heatmap (Scatter plot)
+* Risk trends (Line graph)
+* Risk hierarchy (Sunburst chart)
+
+---
+
+### 🗄️ 5. Database Module (`database.py`)
+
+* Stores scan results in SQLite
+* Maintains scan history
+* Enables data retrieval
+
+---
+
+### 📧 6. Email Alert System (`emailer.py`)
+
+* Sends alerts for:
+
+  * High risks
+  * Critical risks
+* Includes:
+
+  * Cause of vulnerability
+  * Recommended actions
+
+---
+
+### 📄 7. Report Generation (`report.py`)
+
+* Generates PDF reports
+* Includes:
+
+  * Summary
+  * Risk details
+  * Vulnerable services
+
+---
+
+### 🔗 8. API Module (`api.py`)
+
+| Endpoint                    | Description        |
+| --------------------------- | ------------------ |
+| `/results`                  | Get all scan data  |
+| `/results/severity/{level}` | Filter by severity |
+| `/results/ip/{ip}`          | Filter by IP       |
+
+---
+
+## 🖥️ User Interface
+
+### 🏠 Home Page
+
+* Overview of features
+* Launch dashboard
+
+### 📊 Dashboard Page
+
+* Input:
+
+  * Target IP/domain
+  * Email
+* Output:
+
+  * Scan results
+  * Risk summary
+  * Filters
+
+### 📈 Analysis Page
+
+* Heatmaps
+* Trends
+* Service analysis
+
+### 📜 History Page
+
+* View previous scans
+
+### 📄 Reports Page
+
+* Download:
+
+  * PDF
+  * CSV
+  * JSON
+
+---
+
+## 🔄 Workflow
+
+1. User enters targets
+2. System runs Nmap scan
+3. Extracts open ports & services
+4. Calls VirusTotal API
+5. Calculates risk score
+6. Stores data in database
+7. Displays results in dashboard
+8. Sends alert email (if needed)
+9. Generates reports
 
 ---
 
 ## 🔒 Security Features
 
-* Real-time vulnerability detection
-* Threat intelligence integration
-* Risk-based prioritization
-* Alert notifications
+* API key protection using `.env`
+* Secure email authentication (SMTP SSL)
+* Input validation for targets and email
+* No sensitive data exposed in UI
+
+---
+
+## 📊 Outputs
+
+* 📊 Risk dashboards
+* 📧 Email alerts
+* 📄 PDF reports
+* 📁 CSV/JSON exports
+* 📜 Scan history logs
+
+---
+
+## ✅ Advantages
+
+* Fully automated scanning
+* Real-time threat intelligence
+* Easy-to-use dashboard
+* Lightweight and fast
+* Scalable architecture
+
+---
+
+## ⚠️ Limitations
+
+* Depends on external APIs (VirusTotal)
+* Requires Nmap installation
+* Basic risk scoring (not full CVSS)
+* Limited deep vulnerability scanning
 
 ---
 
 ## 🚀 Future Enhancements
 
-* 🔐 User Authentication (JWT/OAuth)
-* ☁️ Cloud Deployment
-* 📡 Integration with Shodan/Nessus
-* 📊 Advanced AI-based threat prediction
-* 👥 Multi-user support
+* AI-based anomaly detection
+* Cloud deployment
+* Real-time monitoring system
+
+---
+
+## 🛠️ How to Run the Project
+
+### Step 1: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 2: Setup Environment Variables
+
+Create a `.env` file:
+
+```
+VT_API_KEY=your_api_key
+EMAIL_SENDER=your_email
+EMAIL_PASSWORD=your_password
+```
+
+### Step 3: Run Streamlit App
+
+```bash
+streamlit run dashboard/home.py
+```
+
+### Step 4: Run API (Optional)
+
+```bash
+uvicorn api:app --reload
+```
 
 ---
 
@@ -207,3 +322,10 @@ This project is licensed under the MIT License.
 
 ---
 
+## 🧾 Conclusion
+
+This project successfully implements a **Cyber Risk Assessment Platform** that automates scanning, analyzes vulnerabilities, and provides actionable insights.
+
+It enables organizations to proactively identify risks, improve security posture, and ensure better compliance with cybersecurity standards.
+
+---
